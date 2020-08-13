@@ -1,7 +1,7 @@
 function GetPodStatuses ($podName)
 {
     $podJson = (kubectl get pod $podName -o json)
-    $podInfo = $podJson | ConvertFrom-Json -Depth 100
+    $podInfo = $podJson | ConvertFrom-Json
     return $podInfo.status.containerStatuses
 }
 
@@ -32,6 +32,7 @@ function WaitForPodReady($podName, $containerName = "")
     $maxInterval = 64
     $timeOut = 600
     $startTime = [DateTime]::Now
+    $secondsPassed = 0
     while (-not (IsPodReady -podName $podName -containerName $containerName))
     {
         Start-Sleep -Seconds $interval
